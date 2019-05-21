@@ -7,12 +7,13 @@
 <ion-list class="form">
   <ion-item class="field">
     <ion-label class="label">Username</ion-label>
-    <ion-input [(ngModel)]="username" type="text" placeholder="Username"></ion-input>
+    <ion-input [(ngModel)]="user.username" type="text" placeholder="Username"></ion-input>
   </ion-item>
 
   <ion-item class="field">
     <ion-label class="label">Password</ion-label>
-    <ion-input [(ngModel)]="password" type="password" placeholder="Password"></ion-input>
+    <ion-input [(ngModel)]="user.password" type="password" placeholder="Password"></ion-input>
   </ion-item>
+  <button ion-button (click)="auth.logIn(user)">Login</button>
 
 </ion-list>

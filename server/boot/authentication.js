@@ -2,5 +2,7 @@
 
 module.exports = function enableAuthentication(server) {
   // enable authentication
-  server.enableAuth();
+  server.enableAuth({
+    datasource: 'db'
+  });
 };

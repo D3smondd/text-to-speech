@@ -1,4 +1,4 @@
-import { User, AuthService } from './../../app/services/authService';
+import { AuthService, User } from './../../app/services/authService';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -10,17 +10,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   providers: [AuthService]
 })
 export class RegisterPage {
-  user: User;
+  user: User = new User();
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public auth: AuthService) {
-      this.user = new User();
+      console.log('auth:', auth.currentUser)
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RegisterPage');
+    if (this.auth.currentUser.id) {
+      console.log('current user');
+    }
   }
-
 }

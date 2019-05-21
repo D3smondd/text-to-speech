@@ -1,3 +1,21 @@
-page-home {
+.welcome {
+text-align: right;
+}
+
+.input {
+    width: 70%;
+    text-align: center;
+}
+
+.language {
+    width: 70%;
+    text-align: center;
+}
+
+.tts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70vw;
 
 }

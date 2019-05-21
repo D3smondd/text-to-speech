@@ -2,75 +2,89 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams }  from  '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-export class User implements Auth {
+export class User implements Authentication, Authorization {
+    id: string = null;
     username: string = null;
     password: string = null;
-    first_name: string = null;
-    last_name: string = null;
+    firstName: string = null;
+    lastName: string = null;
     email: string = null;
+
+    token: string = null;
+    userId: string = null;
+    ttl: number = null;
+    created: string = null;
 
     constructor() {}
 }
-export interface Auth {
+export interface Authentication {
     username: string,
     password: string
+}
+export interface Authorization {
+    id: string,
+    ttl: number,
+    created: string,
+    userId: string,
+    token: string
 }
 
 @Injectable()
 export class AuthService {
+    currentUser: User = new User();
     userApi: string;
     loggedIn: boolean;
-    currentUser: User;
     authToken: string;
 
     constructor(public _http: HttpClient) {
         this.userApi = "http://localhost:3000/api/"
-        this.authToken = 'foobarbaz';
+        this.authToken = 'foobar';
 
-        let auth: Auth;
         try {
-            auth = JSON.parse(localStorage.getItem('auth')) as Auth;
-            if (auth) {
-                this.logIn(auth)
-                    .subscribe((user: User) => {
-                        if (user) {
-                            // Logged in
-                            localStorage.setItem('auth', JSON.stringify({
-                                username: user.username,
-                                password: user.password
-                            }));
-                            this.currentUser = user;
-                        }
-                        else {
-                            // Did not log in
-                            localStorage.removeItem('auth')
-                        }
-                    })
+            let currentUser = JSON.parse(localStorage.getItem('auth')) as User;
+            if (currentUser) {
+                this.currentUser = currentUser;
+                console.log('Retrieved user', this.currentUser);
             }
         } catch (err) {
-            console.log('Failed to retrieve auth', err);
+            console.log('Failed to retrieve user', err);
             localStorage.removeItem('auth');
         }
     }
 
     // @returns boolean - Success?
-    registerUser(user: User): Observable<User> {
+    registerUser(user: User) {
         let params = new HttpParams();
         params.set('access_token', this.authToken);
 
-        return this._http.post<User>(`${this.userApi}/User`, user, {
+        return this._http.post<User>(`${this.userApi}/appUsers`, user, {
             params: params
+        }).subscribe(function(_user: User) {
+            console.log('Registered user:', _user);
+
+            this.currentUser = _user;
+            localStorage.setItem('auth', JSON.stringify(this.currentUser));
         });
     }
 
-    logIn(auth: Auth): Observable<User> {
+    logIn(auth: Authentication) {
         let params = new HttpParams();
-        params.set('username', auth.username);
-        params.set('password', auth.password);
         params.set('access_token', this.authToken);
 
-        return this._http.get<User>(`${this.userApi}/Users`, {
-            params: params
+        return this._http.post(`${this.userApi}/appUsers/login`, {
+            username: auth.username, 
+            password: auth.password
+        }, {
+            params
+        }).subscribe(function(user: Authorization) {
+            console.log('Logged in user:', user);
+
+            this.currentUser = Object.assign({ username: auth.username }, user);
+            localStorage.setItem('auth', JSON.stringify(this.currentUser));
         });
+    }
+
+    isLoggedIn() {
+        return this.currentUser.token
     }
 }

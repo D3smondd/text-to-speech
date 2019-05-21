@@ -1,6 +1,8 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Text to Speech!</ion-title>
+    <h4 class='welcome' *ngIf="auth.isLoggedIn()">Welcome back!</h4>
+    
   </ion-navbar>
 </ion-header>
 
@@ -9,7 +11,26 @@
   <p>
     Here you can turn anything you type into speech! Give it a try!
   </p>
-  <p>
-    
-  </p>
+  <ion-list >
+    <ion-item class="tts">
+      <ion-input class= "input" type="text" placeholder="Type anything here!" 
+        [(ngModel)]="message"></ion-input>
+    </ion-item>
+    <ion-item class="tts">
+      <ion-label>Language</ion-label>
+      <ion-select [(ngModel)]="locale" class="language">
+        <ion-option value="en-US">En-US</ion-option>
+        <ion-option value="en-GB">En-GB</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="tts">
+      <ion-label>Adjust Speed</ion-label>
+      <ion-range [(ngModel)]="rate">
+        <ion-icon range-left small name="slow"></ion-icon>
+        <ion-icon range-right name="fast"></ion-icon>
+      </ion-range>
+    </ion-item>
+    <button ion-button class="buttons" (click)="tts.talk(message, locale, rate)">Start</button>
+    <button ion-button class="buttons">Stop</button>
+  </ion-list>
 </ion-content>
