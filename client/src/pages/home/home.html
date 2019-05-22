@@ -19,18 +19,19 @@
     <ion-item class="tts">
       <ion-label>Language</ion-label>
       <ion-select [(ngModel)]="locale" class="language">
-        <ion-option value="en-US">En-US</ion-option>
-        <ion-option value="en-GB">En-GB</ion-option>
+        <ion-option value="" selected default hidden>Select a Locale</ion-option>
+        <ion-option *ngFor="let locale of localeKeys"
+          [value]="locale">{{ locales[locale] }}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="tts">
       <ion-label>Adjust Speed</ion-label>
-      <ion-range [(ngModel)]="rate">
+      <ion-range [(ngModel)]="rate" min="1" max="100">
         <ion-icon range-left small name="slow"></ion-icon>
         <ion-icon range-right name="fast"></ion-icon>
       </ion-range>
     </ion-item>
-    <button ion-button class="buttons" (click)="tts.speak(message, locale, rate)">Start</button>
+    <button ion-button class="buttons" (click)="speak()">Start</button>
     <button ion-button class="buttons">Stop</button>
   </ion-list>
 </ion-content>

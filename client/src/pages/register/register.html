@@ -28,6 +28,8 @@
   <ion-item class="field">
     <ion-label class="label">Password</ion-label>
     <ion-input [(ngModel)]="user.password" type="password" placeholder="Password"></ion-input>
+    <!--two way binding for user-->
   </ion-item>
-  <button ion-button (click)="auth.registerUser(user)">Register</button>
+  <button ion-button (click)="auth.registerUser(user)">Register</button> 
+  <!--event binding so that clickingbutton registers user-->
 </ion-list>
