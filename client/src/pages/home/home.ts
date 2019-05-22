@@ -1,12 +1,13 @@
 import { AuthService } from './../../app/services/authService';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { TtsService } from '../../app/services/ttsService';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [AuthService, TtsService]
+  providers: [AuthService]
 })
 export class HomePage {
   message: string;
@@ -16,7 +17,6 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public auth: AuthService,
-    public tts: TtsService) {
-
+    private tts: TextToSpeech) {
   }
 }
