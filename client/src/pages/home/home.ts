@@ -452,9 +452,8 @@ export class HomePage {
     'zu': "Zulu"
   };
   localeKeys: any;
-  speak: any = () => {
-    console.log('this', this.locale)
-  };
+  isReady: boolean = false;
+
 
   constructor(
     public navCtrl: NavController,
@@ -463,15 +462,21 @@ export class HomePage {
       this.localeKeys = Object.keys(this.locales);
       
       document.addEventListener('deviceready', () => {
-        this.speak = function () {
-          tts.speak({
-            text: this.message || 'Input a message',
-            locale: this.locale || 'en-US',
-            rate: this.rate / 100 || 0.5
-          }).catch((err) => {
-            alert('Locale: ' + this.locale + ' is not supported on your device.');
-          });
-        }
+        this.isReady = true;
       });
+  }
+
+  speak () {
+    if (this.isReady) {
+      this.tts.speak({
+        text: this.message || 'Input a message',
+        locale: this.locale || 'en-US',
+        rate: this.rate / 100 || 0.5
+      }).catch((err) => {
+        alert('Locale: ' + this.locale + ' is not supported on your device.');
+      });
+    } else {
+      alert('Device is not ready yet!');
+    }
   }
 }
