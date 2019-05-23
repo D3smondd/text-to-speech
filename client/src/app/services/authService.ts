@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams }  from  '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 
+// User can be authenticated and authorized
 export class User implements Authentication, Authorization {
     id: string = null;
     username: string = null;
@@ -29,6 +29,7 @@ export interface Authorization {
     token: string
 }
 
+// Can be injected into providers
 @Injectable()
 export class AuthService {
     currentUser: User = new User();
@@ -40,6 +41,7 @@ export class AuthService {
         this.userApi = "http://localhost:3000/api/"
         this.authToken = 'foobar';
 
+// TODO: reauth  user        
         try {
             let currentUser = JSON.parse(localStorage.getItem('auth')) as User;
             if (currentUser) {
@@ -52,7 +54,6 @@ export class AuthService {
         }
     }
 
-    // @returns boolean - Success?
     registerUser(user: User) {
         let params = new HttpParams();
         params.set('access_token', this.authToken);
